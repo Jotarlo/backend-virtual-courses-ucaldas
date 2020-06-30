@@ -1,5 +1,6 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {belongsTo, Entity, model, property, hasOne} from '@loopback/repository';
 import {Course} from './course.model';
+import {Certificate} from './certificate.model';
 import {Student} from './student.model';
 
 @model()
@@ -31,6 +32,9 @@ export class Enroll extends Entity {
 
   @belongsTo(() => Course)
   courseId: string;
+
+  @hasOne(() => Certificate)
+  certificate: Certificate;
 
   @belongsTo(() => Student)
   studentId: string;
