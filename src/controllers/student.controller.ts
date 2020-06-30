@@ -21,12 +21,14 @@ import {
   requestBody
 } from '@loopback/rest';
 import {Student} from '../models';
-import {StudentRepository} from '../repositories';
+import {StudentRepository, UserRepository} from '../repositories';
 
 export class StudentController {
   constructor(
     @repository(StudentRepository)
     public studentRepository: StudentRepository,
+    @repository(UserRepository)
+    public userRepository: UserRepository,
   ) {}
 
   @post('/student', {
@@ -50,8 +52,18 @@ export class StudentController {
     })
     student: Omit<Student, 'id'>,
   ): Promise<Student> {
+    let s = await this.studentRepository.create(student);
+    let u = {
+      username: s.document,
+      password: s.document,
+      role: 1,
+      studentId: s.id
+    };
 
-    return this.studentRepository.create(student);
+    let user = await this.userRepository.create(u);
+    user.password = '';
+    s.user = user;
+    return s;
   }
 
   @get('/student/count', {
