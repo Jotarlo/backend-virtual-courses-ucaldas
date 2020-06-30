@@ -43,6 +43,7 @@
     "!*/__tests__"
   ],
   "dependencies": {
+    "@loopback/authentication": "^1.2.1",
     "@loopback/boot": "^2.3.3",
     "@loopback/core": "^2.8.0",
     "@loopback/openapi-v3": "^3.4.3",
@@ -50,18 +51,24 @@
     "@loopback/rest": "^5.1.1",
     "@loopback/rest-explorer": "^2.2.4",
     "@loopback/service-proxy": "^2.3.2",
+    "@types/passport-http-bearer": "^1.0.35",
     "crypto-js": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
     "loopback-connector-mongodb": "^5.2.3",
+    "passport": "^0.4.1",
+    "passport-http": "^0.3.0",
+    "passport-http-bearer": "^1.0.1",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
     "@loopback/build": "^5.4.3",
-    "source-map-support": "^0.5.19",
+    "@loopback/eslint-config": "^8.0.1",
     "@loopback/testlab": "^3.1.7",
     "@types/node": "^10.17.26",
-    "@loopback/eslint-config": "^8.0.1",
+    "@types/passport": "^1.0.3",
+    "@types/passport-http": "^0.3.8",
     "eslint": "^7.2.0",
+    "source-map-support": "^0.5.19",
     "typescript": "~3.9.5"
   }
 }

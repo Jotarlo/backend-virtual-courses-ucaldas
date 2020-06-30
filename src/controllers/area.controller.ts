@@ -1,20 +1,25 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
+  del, get,
+  getModelSchemaRef, param,
+
+
+  patch, post,
+
+
+
+
   put,
-  del,
-  requestBody,
+
+  requestBody
 } from '@loopback/rest';
 import {Area} from '../models';
 import {AreaRepository} from '../repositories';
@@ -22,9 +27,10 @@ import {AreaRepository} from '../repositories';
 export class AreaController {
   constructor(
     @repository(AreaRepository)
-    public areaRepository : AreaRepository,
+    public areaRepository: AreaRepository,
   ) {}
 
+  @authenticate('TokenStrategy')
   @post('/area', {
     responses: {
       '200': {
@@ -49,6 +55,7 @@ export class AreaController {
     return this.areaRepository.create(area);
   }
 
+  @authenticate('TokenStrategy')
   @get('/area/count', {
     responses: {
       '200': {
@@ -63,6 +70,7 @@ export class AreaController {
     return this.areaRepository.count(where);
   }
 
+  @authenticate('TokenStrategy')
   @get('/area', {
     responses: {
       '200': {
