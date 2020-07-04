@@ -1,9 +1,10 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
   del,
@@ -13,18 +14,15 @@ import {
   param,
   patch,
   post,
-  requestBody,
+  requestBody
 } from '@loopback/rest';
-import {
-  Student,
-  Enroll,
-} from '../models';
+import {Enroll, Student} from '../models';
 import {StudentRepository} from '../repositories';
 
 export class StudentEnrollController {
   constructor(
     @repository(StudentRepository) protected studentRepository: StudentRepository,
-  ) { }
+  ) {}
 
   @get('/students/{id}/enrolls', {
     responses: {
@@ -45,6 +43,7 @@ export class StudentEnrollController {
     return this.studentRepository.enrolls(id).find(filter);
   }
 
+  @authenticate('TokenStudentStrategy')
   @post('/students/{id}/enrolls', {
     responses: {
       '200': {

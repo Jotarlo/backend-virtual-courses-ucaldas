@@ -30,7 +30,7 @@ export class AreaController {
     public areaRepository: AreaRepository,
   ) {}
 
-  @authenticate('TokenStrategy')
+  @authenticate('TokenAdminStrategy')
   @post('/area', {
     responses: {
       '200': {
@@ -55,7 +55,7 @@ export class AreaController {
     return this.areaRepository.create(area);
   }
 
-  @authenticate('TokenStrategy')
+  @authenticate('TokenAdminStrategy')
   @get('/area/count', {
     responses: {
       '200': {
@@ -70,7 +70,6 @@ export class AreaController {
     return this.areaRepository.count(where);
   }
 
-  @authenticate('TokenStrategy')
   @get('/area', {
     responses: {
       '200': {
