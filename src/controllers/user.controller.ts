@@ -2,8 +2,11 @@
 
 import {repository} from '@loopback/repository';
 import {HttpErrors, post, requestBody} from '@loopback/rest';
-import {UserRepository} from '../repositories';
+import {SmsNotification} from '../models';
+import {EmailNotification} from '../models/email-notification.model';
+import {StudentRepository, UserRepository} from '../repositories';
 import {AuthService} from '../services/auth.service';
+import {NotificationService} from '../services/notification.service';
 
 // import {inject} from '@loopback/core';
 
@@ -24,7 +27,9 @@ export class UserController {
 
   constructor(
     @repository(UserRepository)
-    public userRepository: UserRepository
+    public userRepository: UserRepository,
+    @repository(StudentRepository)
+    public studentRepository: StudentRepository
   ) {
     this.authService = new AuthService(this.userRepository);
   }
@@ -69,16 +74,41 @@ export class UserController {
       // 1. SMS
       // 2. Mail
       // ....
+      let student = await this.studentRepository.findOne({where: {document: passwordResetData.username}})
       switch (passwordResetData.type) {
         case 1:
-          // send sms
-          console.log("Sending sms: " + randomPassword);
-          return true;
+          if (student) {
+            let notification = new SmsNotification({
+              body: `Su nueva contraseña es: ${randomPassword}`,
+              to: student.phone
+            });
+            let sms = await new NotificationService().SmsNotification(notification);
+            if (sms) {
+              console.log("sms message sent");
+              return true
+            }
+            throw new HttpErrors[400]("Phone is not found");
+          }
+          throw new HttpErrors[400]("user not found");
+
           break;
         case 2:
           // send mail
-          console.log("Sending mail: " + randomPassword);
-          return true;
+          if (student) {
+            let notification = new EmailNotification({
+              textBody: `Su nueva contraseña es: ${randomPassword}`,
+              htmlBody: `Su nueva contraseña es: ${randomPassword}`,
+              to: student.email,
+              subject: 'Nueva contraseña'
+            });
+            let mail = await new NotificationService().MailNotification(notification);
+            if (mail) {
+              console.log("mail message sent");
+              return true
+            }
+            throw new HttpErrors[400]("Email is not found");
+          }
+          throw new HttpErrors[400]("User not found");
           break;
 
         default:

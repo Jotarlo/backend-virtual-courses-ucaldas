@@ -7,3 +7,5 @@ export * from './enroll.model';
 export * from './student.model';
 export * from './user.model';
 export * from './certificate.model';
+export * from './sms-notification.model';
+export * from './email-notification.model';
