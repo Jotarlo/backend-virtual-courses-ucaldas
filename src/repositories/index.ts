@@ -7,3 +7,4 @@ export * from './section.repository';
 export * from './certificate.repository';
 export * from './student.repository';
 export * from './user.repository';
+export * from './advertising.repository';

@@ -20,3 +20,4 @@ export * from './enroll-student.controller';
 export * from './student-user.controller';
 export * from './user-student.controller';
 export * from './user.controller';
+export * from './advertising.controller';
