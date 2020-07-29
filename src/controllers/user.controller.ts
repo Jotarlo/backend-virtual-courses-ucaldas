@@ -21,6 +21,12 @@ class PasswordResetData {
   type: number;
 }
 
+class ChangePasswordData {
+  id: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
 export class UserController {
 
   authService: AuthService;
@@ -69,6 +75,7 @@ export class UserController {
     @requestBody() passwordResetData: PasswordResetData
   ): Promise<boolean> {
     let randomPassword = await this.authService.ResetPassword(passwordResetData.username);
+    console.log(randomPassword);
     if (randomPassword) {
       // send sms or mail with new password
       // 1. SMS
@@ -115,6 +122,25 @@ export class UserController {
           throw new HttpErrors[400]("This notification type is not supported.");
           break;
       }
+    }
+    throw new HttpErrors[400]("User not found");
+  }
+
+
+
+  @post('/change-password', {
+    responses: {
+      '200': {
+        description: 'Login for users'
+      }
+    }
+  })
+  async changePassword(
+    @requestBody() changePasswordData: ChangePasswordData
+  ): Promise<Boolean> {
+    let user = await this.authService.VerifyUserToChangePassword(changePasswordData.id, changePasswordData.currentPassword);
+    if (user) {
+      return await this.authService.ChangePassword(changePasswordData.id, changePasswordData.newPassword);
     }
     throw new HttpErrors[400]("User not found");
   }

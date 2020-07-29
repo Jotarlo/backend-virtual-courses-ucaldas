@@ -32,6 +32,40 @@ export class AuthService {
   }
 
   /**
+   * Verify if cureent password belongs to user
+   * @param id id of user to verify
+   * @param password current password
+   */
+  async VerifyUserToChangePassword(id: string, password: string): Promise<User | false> {
+    //console.log(`Username: ${username} - Password: ${password}`);
+    let user = await this.userRepository.findById(id);
+    if (user) {
+      let cryptPass = new EncryptDecrypt(keys.LOGIN_CRYPT_METHOD).Encrypt(password);
+      if (user.password == cryptPass) {
+        return user;
+      }
+    }
+    return false;
+  }
+
+  /**
+   *
+   * @param id user id to update passowrd
+   * @param password new password
+   */
+  async ChangePassword(id: string, password: string): Promise<Boolean> {
+    //console.log(`Username: ${username} - Password: ${password}`);
+    let user = await this.userRepository.findById(id);
+    if (user) {
+      let cryptPass = new EncryptDecrypt(keys.LOGIN_CRYPT_METHOD).Encrypt(password);
+      user.password = cryptPass;
+      await this.userRepository.updateById(id, user);
+      return true;
+    }
+    return false;
+  }
+
+  /**
    *
    * @param user
    */
