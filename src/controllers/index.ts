@@ -21,3 +21,5 @@ export * from './student-user.controller';
 export * from './user-student.controller';
 export * from './user.controller';
 export * from './advertising.controller';
+export * from './file-upload.controller';
+export * from './file-download.controller';
