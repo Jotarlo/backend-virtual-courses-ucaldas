@@ -67,6 +67,11 @@ export class Course extends Entity {
   @hasMany(() => Enroll)
   enrolls: Enroll[];
 
+  @property({
+    type: 'string',
+  })
+  sectionId?: string;
+
   constructor(data?: Partial<Course>) {
     super(data);
   }

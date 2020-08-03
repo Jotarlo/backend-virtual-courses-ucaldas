@@ -1,20 +1,25 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
+  del, get,
+  getModelSchemaRef, param,
+
+
+  patch, post,
+
+
+
+
   put,
-  del,
-  requestBody,
+
+  requestBody
 } from '@loopback/rest';
 import {Course} from '../models';
 import {CourseRepository} from '../repositories';
@@ -22,9 +27,10 @@ import {CourseRepository} from '../repositories';
 export class CourseController {
   constructor(
     @repository(CourseRepository)
-    public courseRepository : CourseRepository,
+    public courseRepository: CourseRepository,
   ) {}
 
+  @authenticate('TokenAdminStrategy')
   @post('/course', {
     responses: {
       '200': {
@@ -84,6 +90,7 @@ export class CourseController {
     return this.courseRepository.find(filter);
   }
 
+  @authenticate('TokenAdminStrategy')
   @patch('/course', {
     responses: {
       '200': {
@@ -125,6 +132,7 @@ export class CourseController {
     return this.courseRepository.findById(id, filter);
   }
 
+  @authenticate('TokenAdminStrategy')
   @patch('/course/{id}', {
     responses: {
       '204': {
@@ -146,6 +154,7 @@ export class CourseController {
     await this.courseRepository.updateById(id, course);
   }
 
+  @authenticate('TokenAdminStrategy')
   @put('/course/{id}', {
     responses: {
       '204': {
@@ -160,6 +169,7 @@ export class CourseController {
     await this.courseRepository.replaceById(id, course);
   }
 
+  @authenticate('TokenAdminStrategy')
   @del('/course/{id}', {
     responses: {
       '204': {
