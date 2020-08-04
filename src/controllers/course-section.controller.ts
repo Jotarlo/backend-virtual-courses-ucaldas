@@ -3,7 +3,7 @@ import {
   CountSchema,
   Filter,
   repository,
-  Where
+  Where,
 } from '@loopback/repository';
 import {
   del,
@@ -13,18 +13,18 @@ import {
   param,
   patch,
   post,
-  requestBody
+  requestBody,
 } from '@loopback/rest';
 import {
   Course,
-  Section
+  Section,
 } from '../models';
 import {CourseRepository} from '../repositories';
 
 export class CourseSectionController {
   constructor(
     @repository(CourseRepository) protected courseRepository: CourseRepository,
-  ) {}
+  ) { }
 
   @get('/courses/{id}/sections', {
     responses: {
@@ -60,7 +60,8 @@ export class CourseSectionController {
         'application/json': {
           schema: getModelSchemaRef(Section, {
             title: 'NewSectionInCourse',
-            exclude: ['id']
+            exclude: ['id'],
+            optional: ['courseId']
           }),
         },
       },

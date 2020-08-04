@@ -61,16 +61,11 @@ export class Course extends Entity {
   @belongsTo(() => Area)
   areaId: string;
 
-  @hasMany(() => Section)
-  sections: Section[];
-
   @hasMany(() => Enroll)
   enrolls: Enroll[];
 
-  @property({
-    type: 'string',
-  })
-  sectionId?: string;
+  @hasMany(() => Section)
+  sections: Section[];
 
   constructor(data?: Partial<Course>) {
     super(data);

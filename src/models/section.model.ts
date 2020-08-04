@@ -1,4 +1,4 @@
-import {Entity, model, property, hasOne} from '@loopback/repository';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
 import {Course} from './course.model';
 
 @model()
@@ -39,8 +39,8 @@ export class Section extends Entity {
   })
   attached: string;
 
-  @hasOne(() => Course)
-  course: Course;
+  @belongsTo(() => Course)
+  courseId: string;
 
   constructor(data?: Partial<Section>) {
     super(data);
