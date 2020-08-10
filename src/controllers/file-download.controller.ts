@@ -77,8 +77,8 @@ export class FileDownloadController {
     const folder = this.GetFolderPathByType(type);
     const fileName = await this.GetFilenameById(type, recordId);
     const file = this.ValidateFileName(folder, fileName);
-    console.log("folder: " + folder)
-    console.log("fname: " + fileName)
+    //console.log("folder: " + folder)
+    //console.log("fname: " + fileName)
     response.download(file, fileName);
     return response;
   }
@@ -90,11 +90,11 @@ export class FileDownloadController {
   private GetFolderPathByType(type: number) {
     let filePath = '';
     switch (type) {
-      // customer
+      // student
       case 1:
         filePath = path.join(__dirname, UploadFilesKeys.STUDENT_PROFILE_PHOTO_PATH);
         break;
-      // product
+      // course
       case 2:
         filePath = path.join(__dirname, UploadFilesKeys.COURSE_IMAGE_PATH);
         break;

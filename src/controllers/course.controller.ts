@@ -9,7 +9,18 @@ import {
 } from '@loopback/repository';
 import {
   del, get,
-  getModelSchemaRef, param,
+  getModelSchemaRef,
+
+
+
+
+
+
+
+
+
+
+  HttpErrors, param,
 
 
   patch, post,
@@ -21,13 +32,21 @@ import {
 
   requestBody
 } from '@loopback/rest';
-import {Course} from '../models';
-import {CourseRepository} from '../repositories';
+import {Course, Enroll} from '../models';
+import {CourseRepository, EnrollRepository} from '../repositories';
+
+
+class EnrollData {
+  studentId: string;
+  courseId: string;
+}
 
 export class CourseController {
   constructor(
     @repository(CourseRepository)
     public courseRepository: CourseRepository,
+    @repository(EnrollRepository)
+    public enrollRepository: EnrollRepository
   ) {}
 
   @authenticate('TokenAdminStrategy')
@@ -180,4 +199,42 @@ export class CourseController {
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.courseRepository.deleteById(id);
   }
+
+
+
+  @authenticate('TokenStudentStrategy')
+  @post('/course-enrollment', {
+    responses: {
+      '200': {
+        description: 'Login for users'
+      }
+    }
+  })
+  async enroll(
+    @requestBody() enrollData: EnrollData
+  ): Promise<Boolean> {
+    let course = await this.courseRepository.findById(enrollData.courseId);
+    console.log(enrollData);
+    if (course) {
+      let exists = await this.enrollRepository.findOne({where: {and: [{courseId: enrollData.courseId}, {studentId: enrollData.studentId}]}});
+      console.log(exists);
+      if (exists) {
+        return false;
+      }
+      let currentdate = new Date();
+      let finishdate: Date = new Date();
+      finishdate.setDate(currentdate.getDate() + (course.duration ?? 0 * 7));
+      let enroll = new Enroll({
+        approbedSections: 0,
+        courseId: enrollData.courseId,
+        studentId: enrollData.studentId,
+        startDate: currentdate,
+        finishDate: finishdate
+      });
+      this.enrollRepository.create(enroll);
+      return true;
+    }
+    throw new HttpErrors[403]("This course does not exists!");
+  }
+
 }

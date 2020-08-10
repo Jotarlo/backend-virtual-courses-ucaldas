@@ -1,6 +1,6 @@
-import {belongsTo, Entity, model, property, hasOne} from '@loopback/repository';
-import {Course} from './course.model';
+import {belongsTo, Entity, hasOne, model, property} from '@loopback/repository';
 import {Certificate} from './certificate.model';
+import {Course} from './course.model';
 import {Student} from './student.model';
 
 @model()
@@ -22,13 +22,13 @@ export class Enroll extends Entity {
     type: 'date',
     required: true,
   })
-  startDate: string;
+  startDate: Date;
 
   @property({
     type: 'date',
     required: true,
   })
-  finishDate: string;
+  finishDate: Date;
 
   @belongsTo(() => Course)
   courseId: string;
